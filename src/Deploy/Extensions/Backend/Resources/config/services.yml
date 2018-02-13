@@ -1,0 +1,23 @@
+services:
+    backend_build_event_listener:
+        class: Deploy\Extensions\Backend\EventListener\BackendBuild
+        tags:
+            -
+                name:                 'event_listener'
+                event:                'build.source'
+                method:               'buildBackendService'
+                priority:             256
+            -
+                name:                 'event_listener'
+                event:                'build.source'
+                method:               'patchAPIBaseConfig'
+                priority:             128
+            -
+                name:                 'event_listener'
+                event:                'build.source'
+                method:               'buildBackendAdmin'
+        calls:
+            -
+                method:               injectShellExecuteLocal
+                arguments:
+                    -                 '@execute_local'
