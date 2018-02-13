@@ -1,0 +1,18 @@
+{
+  "chmod": "0755",
+  "directories": ["src"],
+  "extract": true,
+  "finder": [
+    {
+      "name": "*.php",
+      "exclude": [
+        "Tests"
+      ],
+      "in": "vendor"
+    }
+  ],
+  "main": "bin/deploy",
+  "output": "dist/deploy.phar",
+  "web": false,
+  "stub": true
+}

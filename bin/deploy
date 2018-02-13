@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+use Deploy\Kernel;
+require __DIR__.'/../src/bootstrap.php';
+
+if (PHP_SAPI !== 'cli') {
+    echo "必須在 Console 模式下執行";
+    exit(-1);
+}
+$kernel = new Kernel();
+$kernel->handle();

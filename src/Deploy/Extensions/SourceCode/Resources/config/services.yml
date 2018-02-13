@@ -1,0 +1,17 @@
+services:
+    source_code_event_listener:
+        class:    Deploy\Extensions\SourceCode\EventListener\WorkingSource
+        tags:
+            -
+                name:       'event_listener'
+                event:      'fetch.source'
+                method:     'onFetchSource'
+            -
+                name:       'event_listener'
+                event:      'cleanup.source'
+                method:     'onCleanupSource'
+        calls:
+            -
+                method:     injectShellExecuteLocal
+                arguments:
+                    -       '@execute_local'

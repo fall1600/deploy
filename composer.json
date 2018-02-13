@@ -1,0 +1,33 @@
+{
+    "name": "jhlin/ggdeploy",
+    "description": "practice for being a tooler",
+    "type": "project",
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "Deploy\\": "src/Deploy"
+        }
+    },
+    "authors": [
+        {
+            "name": "jhlin",
+            "email": "jhlin@dgfactor.com.tw"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.0",
+        "symfony/console": "^3.3",
+        "symfony/dependency-injection": "^3.3",
+        "symfony/finder": "^3.3",
+        "symfony/config": "^3.3",
+        "symfony/yaml": "^3.3",
+        "symfony/event-dispatcher": "^3.3",
+        "symfony/process": "^3.3"
+    },
+    "config": {
+        "platform" : {
+            "php": "7.0"
+        }
+    }
+}

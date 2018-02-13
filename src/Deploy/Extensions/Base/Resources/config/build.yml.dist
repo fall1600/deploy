@@ -1,0 +1,4 @@
+build:
+    source:
+        repo:           git@git.dgfactor.com
+        revision:       master

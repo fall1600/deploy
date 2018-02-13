@@ -1,0 +1,21 @@
+services:
+    application:
+          class:            Symfony\Component\Console\Application
+    event_dispatcher:
+          class:            Symfony\Component\EventDispatcher\EventDispatcher
+    base_deploy_command:
+          class:            Deploy\Extensions\Base\Command\DeployCommand
+          tags:
+              -
+                   name:    'command'
+    deploy:
+          class:            Deploy\Extensions\Base\Deploy
+          calls:
+              -
+                   method:  injectEventDispatcher
+                   arguments:
+                       -    '@event_dispatcher'
+    build_config:
+          class:           Deploy\Extensions\Base\Config\BuildConfig
+    execute_local:
+          class:           Deploy\Extensions\Base\Service\ShellExecutor\Local
