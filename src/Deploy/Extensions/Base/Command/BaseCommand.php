@@ -22,6 +22,7 @@ abstract class BaseCommand extends ContainerAwareCommand
             ->addOption('repo', null, InputOption::VALUE_OPTIONAL, '專案 git source 來源')
             ->addOption('revision', 'r', InputOption::VALUE_OPTIONAL, '專案 revision [master, develop, relase, tag]')
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, '設定檔')
+            ->addOption('backend', 'b', InputOption::VALUE_OPTIONAL, 'backend 名稱', 'backend')
             ;
 
     }
@@ -44,6 +45,7 @@ abstract class BaseCommand extends ContainerAwareCommand
         $config['build']['source']['path'] = $input->getOption('path');
         $config['build']['source']['repo'] = $input->getOption('repo');
         $config['build']['source']['revision'] = $input->getOption('revision');
+        $config['build']['source']['backend'] = $input->getOption('backend');
         return $config;
     }
 

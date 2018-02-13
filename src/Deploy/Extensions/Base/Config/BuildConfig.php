@@ -23,6 +23,7 @@ class BuildConfig implements ConfigurationInterface
                         ->scalarNode('repo')->isRequired()->end()
                         ->scalarNode('revision')->isRequired()->end()
                         ->scalarNode('path')->isRequired()->end()
+                        ->scalarNode('backend')->isRequired()->defaultNull()->end()
                     ->end()
                 ->end()
             ->end()

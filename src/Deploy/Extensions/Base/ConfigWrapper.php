@@ -37,4 +37,12 @@ class ConfigWrapper
     {
         return $this->sourcePath;
     }
+
+    public function getBackendSourcePath()
+    {
+        if ($this->config['source']['backend'] == null) {
+            return null;
+        }
+        return "{$this->getSourcePath()}/{$this->config['source']['backend']}";
+    }
 }
