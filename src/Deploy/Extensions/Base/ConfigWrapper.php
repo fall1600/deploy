@@ -51,4 +51,18 @@ class ConfigWrapper
         $protocol = 'http'.($this->config['target']['service']['https']?'s':'');
         return "$protocol://{$this->config['target']['service']['host']}/admin/api";
     }
+
+    public function getFrontendSourcePath()
+    {
+        if ($this->config['source']['frontend'] == null) {
+            return null;
+        }
+        return "{$this->getSourcePath()}/{$this->config['source']['frontend']}";
+    }
+
+    public function getServiceAPIBase()
+    {
+        $protocol = 'http'.($this->config['target']['service']['https']?'s':'');
+        return "$protocol://{$this->config['target']['service']['host']}/api";
+    }
 }

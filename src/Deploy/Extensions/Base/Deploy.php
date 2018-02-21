@@ -5,6 +5,7 @@ namespace Deploy\Extensions\Base;
 use Deploy\Events\AbstractEvent;
 use Deploy\Events\BuildSourceEvent;
 use Deploy\Events\FetchSourceEvent;
+use Deploy\Events\PreBuildSourceEvent;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -24,6 +25,7 @@ class Deploy
         $configWrapper = new ConfigWrapper($config);
         try {
             $this->fetchSource($configWrapper, $output);
+            $this->preBuildSource($configWrapper, $output);
             $this->buildSource($configWrapper, $output);
         } catch (RuntimeException $exception) {
             $output->writeln($exception->getMessage());
@@ -35,6 +37,13 @@ class Deploy
     protected function fetchSource(ConfigWrapper $configWrapper, OutputInterface $output)
     {
         $event = new FetchSourceEvent($configWrapper, $output);
+        $this->dispatch($event);
+        return $event;
+    }
+
+    protected function preBuildSource(ConfigWrapper $configWrapper, OutputInterface $output)
+    {
+        $event = new PreBuildSourceEvent($configWrapper, $output);
         $this->dispatch($event);
         return $event;
     }
