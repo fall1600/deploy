@@ -1,0 +1,21 @@
+services:
+    frontend_build_event_listener:
+        class: Deploy\Extensions\Frontend\EventListener\FrontendBuild
+        tags:
+            -
+                name:     'event_listener'
+                event:    'pre.build.source'
+                method:   'patchAPIBaseConfig'
+            -
+                name:     'event_listener'
+                event:    'build.source'
+                method:   'buildFrontend'
+            -
+                name:     'event_listener'
+                event:    'post.build.source'
+                method:   'addServerPush'
+        calls:
+            -
+                method:   injectShellExecuteLocal
+                arguments:
+                    -     '@execute_local'
