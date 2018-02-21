@@ -45,4 +45,10 @@ class ConfigWrapper
         }
         return "{$this->getSourcePath()}/{$this->config['source']['backend']}";
     }
+
+    public function getAdminAPIBase()
+    {
+        $protocol = 'http'.($this->config['target']['service']['https']?'s':'');
+        return "$protocol://{$this->config['target']['service']['host']}/admin/api";
+    }
 }

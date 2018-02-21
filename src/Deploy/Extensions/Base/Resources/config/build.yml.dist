@@ -2,3 +2,21 @@ build:
     source:
         repo:           git@git.dgfactor.com
         revision:       master
+        frontend:       frontend
+        backend:        backend
+    target:
+        web:
+            host:       www.dgfactor.com
+            server:
+                -       0.web.dgfactor.com
+                -       1.web.dgfactor.com
+        admin:
+            host:       admin.dgfactor.com
+            server:
+                -       0.web.dgfactor.com
+                -       1.web.dgfactor.com
+        service:
+            host:       service.dgfactor.com
+            server:
+                -       0.service.dgfactor.com
+                -       1.service.dgfactor.com
