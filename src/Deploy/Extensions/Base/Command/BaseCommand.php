@@ -32,6 +32,13 @@ abstract class BaseCommand extends ContainerAwareCommand
             ->addOption('web-host', null, InputOption::VALUE_OPTIONAL, '前台 web 網址 www.{host}]')
             ->addOption('admin-host', null, InputOption::VALUE_OPTIONAL, '後台 admin 網址 [admin.{host}]')
             ->addOption('service-host', null, InputOption::VALUE_OPTIONAL, 'api service 網址 [service.{host}]')
+            ->addOption('host-https', null, InputOption::VALUE_NONE, '網站網址是否走 https')
+            ->addOption('web-host-https', null, InputOption::VALUE_NONE, '前台 web 網址 www.{host}] 是否走 https')
+            ->addOption('admin-host-https', null, InputOption::VALUE_NONE, '後台 admin 網址 [admin.{host}] 是否走 https')
+            ->addOption('service-host-https', null, InputOption::VALUE_NONE, 'api service 網址 [service.{host}] 是否走 https')
+            ->addOption('web-path', null, InputOption::VALUE_OPTIONAL, '前台 web 路徑 [/mnt/site/{web-host}]')
+            ->addOption('admin-path', null, InputOption::VALUE_OPTIONAL, '後台 admin 路徑 [/mnt/site/{admin-host}]')
+            ->addOption('service-path', null, InputOption::VALUE_OPTIONAL, 'api service 路徑 [/mnt/service/{service-host}]')
             ;
 
     }
@@ -59,6 +66,28 @@ abstract class BaseCommand extends ContainerAwareCommand
         $config['build']['target']['web']['host'] = $this->createPrefixParam('www', $input->getOption('host'), $input->getOption('web-host'));
         $config['build']['target']['admin']['host'] = $this->createPrefixParam('admin', $input->getOption('host'), $input->getOption('admin-host'));
         $config['build']['target']['service']['host'] = $this->createPrefixParam('service', $input->getOption('host'), $input->getOption('service-host'));
+        $config['build']['target']['web']['https'] = $this->createBooleanChoiceParam($input->getOption('host-https'), $input->getOption('web-host-https'));
+        $config['build']['target']['admin']['https'] = $this->createBooleanChoiceParam($input->getOption('host-https'), $input->getOption('admin-host-https'));
+        $config['build']['target']['service']['https'] = $this->createBooleanChoiceParam($input->getOption('host-https'), $input->getOption('service-host-https'));
+
+        $config['build']['target']['web']['path'] = $this->createStringChoiceParam(
+            $this->createPrefixParam(
+                '/mnt/site/www', $input->getOption('host'), $input->getOption('web-host')
+            ),
+            $input->getOption('web-path')
+        );
+        $config['build']['target']['admin']['path'] = $this->createStringChoiceParam(
+            $this->createPrefixParam(
+                '/mnt/site/admin', $input->getOption('host'), $input->getOption('admin-host')
+            ),
+            $input->getOption('admin-path')
+        );
+        $config['build']['target']['service']['path'] = $this->createStringChoiceParam(
+            $this->createPrefixParam(
+                '/mnt/service/service', $input->getOption('host'), $input->getOption('service-host')
+            ),
+            $input->getOption('service-path')
+        );
 
         $config['build']['target']['web']['server'] = $this->createServerParam($input->getOption('server'), $input->getOption('web-server'));
         $config['build']['target']['admin']['server'] = $this->createServerParam($input->getOption('server'), $input->getOption('admin-server'));
@@ -109,6 +138,20 @@ abstract class BaseCommand extends ContainerAwareCommand
         }
 
         return null;
+    }
+
+    protected function createBooleanChoiceParam(bool $baseHost, bool $host): bool
+    {
+        return $baseHost || $host;
+    }
+
+    protected function createStringChoiceParam(string $baseHost = null, string $host = null)
+    {
+        if (!is_null($host)) {
+            return $host;
+        }
+
+        return $baseHost;
     }
 
     protected function createServerParam($baseHost, $host)

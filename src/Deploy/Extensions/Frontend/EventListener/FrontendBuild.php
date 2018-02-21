@@ -3,8 +3,10 @@
 namespace Deploy\Extensions\Frontend\EventListener;
 
 use Deploy\Events\BuildSourceEvent;
+use Deploy\Events\PostBuildSourceEvent;
 use Deploy\Events\PreBuildSourceEvent;
 use Deploy\Extensions\Base\Service\ShellExecutor\Local;
+use Symfony\Component\DomCrawler\Crawler;
 
 class FrontendBuild
 {
@@ -50,6 +52,20 @@ class FrontendBuild
         );
     }
 
+    public function addServerPush(PostBuildSourceEvent $event)
+    {
+        $config = $event->getConfigWrapper();
+        $output = $event->getOutput();
+        $htmlContent = file_get_contents($config->getFrontendSourcePath()."/dist/index.html");
+        $output->writeln("patch server push .htaccess");
+        $cssLinks = $this->analyzeCss($htmlContent);
+        $jsLinks = $this->analyzeJs($htmlContent);
+        $this->patchServerPushConfig(
+            $config->getFrontendSourcePath().'/dist/.htaccess',
+            array_merge($cssLinks, $jsLinks)
+        );
+    }
+
     protected function findAPIBaseConfigPath($frontendPath)
     {
         if (file_exists("$frontendPath/src/static/apibase.json")) {
@@ -74,5 +90,48 @@ class FrontendBuild
             $filePath,
             json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
         );
+    }
+
+    protected function analyzeCss($htmlContent)
+    {
+        $css = array();
+        $crawler = new Crawler($htmlContent);
+        $crawler
+            ->filter("link[rel='stylesheet']")
+            ->reduce(function(Crawler $node, $i) use (&$css) {
+                $href = $node->attr('href');
+                array_push($css, "<$href>; rel=preload; as=stylesheet");
+            });
+        return $css;
+    }
+
+    protected function analyzeJs($htmlContent)
+    {
+        $js = array();
+        $crawler = new Crawler($htmlContent);
+        $crawler
+            ->filter('script')
+            ->reduce(function(Crawler $node, $i) use (&$js) {
+                $src = $node->attr('src');
+                if ($src != "") {
+                    array_push($js, "<$src>; rel=preload; as=script");
+                }
+            });
+        return $js;
+    }
+
+    protected function patchServerPushConfig($htaccessPath, $links)
+    {
+        if (!file_exists($htaccessPath)) {
+            return;
+        }
+
+        $file = fopen($htaccessPath, 'a');
+        $content = sprintf(
+            "\nHeader set Link\"%s\" env=index_assets_push\n",
+            implode(', ', $links)
+        );
+        fwrite($file, $content);
+        fclose($file);
     }
 }

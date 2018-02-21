@@ -3,3 +3,4 @@ build:
         revision:       master
         frontend:       ~
         backend:        ~
+        path:           ~

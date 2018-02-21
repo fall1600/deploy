@@ -4,19 +4,26 @@ build:
         revision:       master
         frontend:       frontend
         backend:        backend
+        patch:          '/foo/bar'
     target:
         web:
             host:       www.dgfactor.com
+            https:      true
+            path:       /mnt/site/www.dgfactor.com
             server:
                 -       0.web.dgfactor.com
                 -       1.web.dgfactor.com
         admin:
             host:       admin.dgfactor.com
+            https:      true
+            path:       /mnt/site/admin.dgfactor.com
             server:
                 -       0.web.dgfactor.com
                 -       1.web.dgfactor.com
         service:
             host:       service.dgfactor.com
+            https:      true
+            path:       /mnt/service/service.dgfactor.com
             server:
                 -       0.service.dgfactor.com
                 -       1.service.dgfactor.com
