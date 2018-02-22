@@ -48,6 +48,6 @@ services:
                 arguments:
                     -                 '@execute_remote'
             -
-                method:               injectRsync
+                method:               injectShellExecuteRsync
                 arguments:
-                    -                 '@rsync'
+                    -                 '@execute_rsync'
