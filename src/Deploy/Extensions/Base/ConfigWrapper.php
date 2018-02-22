@@ -52,6 +52,41 @@ class ConfigWrapper
         return "$protocol://{$this->config['target']['service']['host']}/admin/api";
     }
 
+    public function getAdminSourcePath()
+    {
+        return "{$this->getBackendSourcePath()}/vue";
+    }
+
+    public function getAdminPath()
+    {
+        return $this->config['target']['admin']['path'];
+    }
+
+    public function getAdminServers()
+    {
+        return $this->config['target']['admin']['server'];
+    }
+
+    public function getRemoteUser()
+    {
+        return $this->config['remote']['user'];
+    }
+
+    public function getRemoteKey()
+    {
+        return $this->config['remote']['key'];
+    }
+
+    public function getServicePath()
+    {
+        return $this->config['target']['service']['path'];
+    }
+
+    public function getServiceServers()
+    {
+        return $this->config['target']['service']['server'];
+    }
+
     public function getFrontendSourcePath()
     {
         if ($this->config['source']['frontend'] == null) {
