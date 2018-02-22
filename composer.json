@@ -24,7 +24,8 @@
         "symfony/yaml": "^3.3",
         "symfony/event-dispatcher": "^3.3",
         "symfony/process": "^3.3",
-        "symfony/dom-crawler": "^3.3"
+        "symfony/dom-crawler": "^3.3",
+        "symfony/css-selector": "^3.3"
     },
     "config": {
         "platform" : {
