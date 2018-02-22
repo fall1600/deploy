@@ -19,3 +19,7 @@ services:
           class:           Deploy\Extensions\Base\Config\BuildConfig
     execute_local:
           class:           Deploy\Extensions\Base\Service\ShellExecutor\Local
+    execute_remote:
+          class:           Deploy\Extensions\Base\Service\ShellExecutor\Remote
+    rsync:
+          class:           Deploy\Extensions\Base\Service\ShellExecutor\Rsync

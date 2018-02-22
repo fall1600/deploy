@@ -21,3 +21,33 @@ services:
                 method:               injectShellExecuteLocal
                 arguments:
                     -                 '@execute_local'
+    backend_deploy_event_listener:
+        class: Deploy\Extensions\Backend\EventListener\BackendDeploy
+        tags:
+            -
+                name:                 'event_listener'
+                event:                'deploy.source'
+                method:               'deployAdmin'
+                priority:             256
+            -
+                name:                 'event_listener'
+                event:                'deploy.source'
+                method:               'deployService'
+                priority:             128
+            -
+                name:                 'event_listener'
+                event:                'deploy.source'
+                method:               'rebuildServiceCache'
+        calls:
+            -
+                method:               injectShellExecuteLocal
+                arguments:
+                    -                 '@execute_local'
+            -
+                method:               injectShellExecuteRemote
+                arguments:
+                    -                 '@execute_remote'
+            -
+                method:               injectRsync
+                arguments:
+                    -                 '@rsync'

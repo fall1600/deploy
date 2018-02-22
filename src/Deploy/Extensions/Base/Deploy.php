@@ -27,6 +27,7 @@ class Deploy
             $this->fetchSource($configWrapper, $output);
             $this->preBuildSource($configWrapper, $output);
             $this->buildSource($configWrapper, $output);
+            $this->postBuildSource($configWrapper, $output);
         } catch (RuntimeException $exception) {
             $output->writeln($exception->getMessage());
             return $exception->getCode();
