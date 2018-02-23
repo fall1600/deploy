@@ -19,3 +19,15 @@ services:
                 method:   injectShellExecuteLocal
                 arguments:
                     -     '@execute_local'
+    frontend_deploy_event_listener:
+        class: Deploy\Extensions\Frontend\EventListener\FrontendDeploy
+        tags:
+            -
+                name:     'event_listener'
+                event:    'deploy.source'
+                method:   'deployFrontend'
+        calls:
+            -
+                method:   injectShellExecuteRsync
+                arguments:
+                    -     '@execute_rsync'

@@ -95,6 +95,16 @@ class ConfigWrapper
         return "{$this->getSourcePath()}/{$this->config['source']['frontend']}";
     }
 
+    public function getWebPath()
+    {
+        return $this->config['target']['web']['path'];
+    }
+
+    public function getWebServers()
+    {
+        return $this->config['target']['web']['server'];
+    }
+
     public function getServiceAPIBase()
     {
         $protocol = 'http'.($this->config['target']['service']['https']?'s':'');
