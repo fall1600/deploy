@@ -26,5 +26,15 @@ services:
           class:           Deploy\Extensions\Base\Service\ShellExecutor\Local
     execute_remote:
           class:           Deploy\Extensions\Base\Service\ShellExecutor\Remote
+          calls:
+              -
+                  method:  injectShellExecuteLocal
+                  arguments:
+                       -   '@execute_local'
     execute_rsync:
           class:           Deploy\Extensions\Base\Service\ShellExecutor\Rsync
+          calls:
+              -
+                  method:  injectShellExecuteLocal
+                  arguments:
+                       -   '@execute_local'

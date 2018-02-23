@@ -27,3 +27,9 @@ build:
             server:
                 -       0.service.dgfactor.com
                 -       1.service.dgfactor.com
+    remote:
+         user:          site
+         key:           path_to_key
+         pre:           ~
+         post:
+                -       sudo service apache2 restart

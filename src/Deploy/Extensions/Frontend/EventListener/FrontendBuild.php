@@ -128,7 +128,7 @@ class FrontendBuild
 
         $file = fopen($htaccessPath, 'a');
         $content = sprintf(
-            "\nHeader set Link\"%s\" env=index_assets_push\n",
+            "\nHeader set Link \"%s\" env=index_assets_push\n",
             implode(', ', $links)
         );
         fwrite($file, $content);

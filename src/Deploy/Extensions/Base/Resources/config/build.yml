@@ -4,3 +4,5 @@ build:
         frontend:       ~
         backend:        ~
         path:           ~
+    remote:
+        user:           site

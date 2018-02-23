@@ -22,7 +22,6 @@ class BuildConfig implements ConfigurationInterface
                     ->children()
                         ->scalarNode('repo')->isRequired()->end()
                         ->scalarNode('revision')->isRequired()->end()
-                        ->scalarNode('path')->isRequired()->end()
                         ->scalarNode('frontend')->isRequired()->defaultNull()->end()
                         ->scalarNode('backend')->isRequired()->defaultNull()->end()
                         ->scalarNode('path')->isRequired()->end()
@@ -37,15 +36,15 @@ class BuildConfig implements ConfigurationInterface
                                 ->booleanNode('https')->defaultTrue()->end()
                                 ->arrayNode('server')
                                     ->beforeNormalization()
-                                        ->ifString()
-                                            ->then(function($v) {
-                                                return array($v);
-                                            })
-                                        ->end()
-                                        ->prototype('scalar')->end()
+                                    ->ifString()
+                                    ->then(function($v) {
+                                        return array($v);
+                                    })
                                     ->end()
+                                    ->prototype('scalar')->end()
                                 ->end()
                             ->end()
+                        ->end()
                         ->arrayNode('admin')
                             ->children()
                                 ->scalarNode('host')->end()
@@ -53,15 +52,15 @@ class BuildConfig implements ConfigurationInterface
                                 ->booleanNode('https')->defaultTrue()->end()
                                 ->arrayNode('server')
                                     ->beforeNormalization()
-                                        ->ifString()
-                                            ->then(function($v) {
-                                                return array($v);
-                                            })
-                                        ->end()
-                                        ->prototype('scalar')->end()
+                                    ->ifString()
+                                    ->then(function($v) {
+                                        return array($v);
+                                    })
                                     ->end()
+                                    ->prototype('scalar')->end()
                                 ->end()
                             ->end()
+                        ->end()
                         ->arrayNode('service')
                             ->children()
                                 ->scalarNode('host')->end()
@@ -69,15 +68,41 @@ class BuildConfig implements ConfigurationInterface
                                 ->booleanNode('https')->defaultTrue()->end()
                                 ->arrayNode('server')
                                     ->beforeNormalization()
-                                        ->ifString()
-                                            ->then(function($v) {
-                                                return array($v);
-                                            })
-                                        ->end()
-                                        ->prototype('scalar')->end()
+                                    ->ifString()
+                                        ->then(function($v) {
+                                            return array($v);
+                                        })
                                     ->end()
+                                    ->prototype('scalar')->end()
                                 ->end()
                             ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('remote')
+                    ->children()
+                        ->scalarNode('user')->isRequired()->end()
+                        ->scalarNode('key')->defaultNull()->end()
+                        ->arrayNode('pre')
+                            ->beforeNormalization()
+                            ->ifString()
+                            ->then(function($v) {
+                                return array($v);
+                            })
+                            ->end()
+                            ->prototype('array')->end()
+                        ->end()
+                        ->arrayNode('post')
+                            ->beforeNormalization()
+                            ->ifString()
+                            ->then(function($v) {
+                                return array($v);
+                            })
+                            ->end()
+                            ->prototype('array')->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
         return $treeBuilder;
