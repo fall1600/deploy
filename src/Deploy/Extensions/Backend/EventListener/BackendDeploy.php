@@ -88,6 +88,11 @@ class BackendDeploy
         foreach ($servers as $server) {
             $this->remoteExecutor->execute(
                 $remoteKey, "$remoteUser@$server",
+                array('mkdir', '-p', "$servicePath/web/upload"),
+                $servicePath, $output
+            );
+            $this->remoteExecutor->execute(
+                $remoteKey, "$remoteUser@$server",
                 array('chmod', '1777', "$servicePath/web/upload"),
                 $servicePath, $output
             );
