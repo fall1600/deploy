@@ -87,34 +87,29 @@ class BackendDeploy
         $remoteKey = $configWrapper->getRemoteKey();
         foreach ($servers as $server) {
             $this->remoteExecutor->execute(
-                $remoteKey,
-                "$remoteUser@$server",
-                array('mkdir', '-p', "$servicePath/web/upload"),
-                $servicePath,
-                $output
-            );
-            $this->remoteExecutor->execute(
-                $remoteKey,
-                "$remoteUser@$server",
+                $remoteKey, "$remoteUser@$server",
                 array('chmod', '1777', "$servicePath/web/upload"),
-                $servicePath,
-                $output
+                $servicePath, $output
             );
             $this->remoteExecutor->execute(
-                $remoteKey,
-                "$remoteUser@$server",
+                $remoteKey, "$remoteUser@$server",
                 array('composer', 'install', '--no-interaction'),
-                $servicePath,
-                $output
+                $servicePath, $output
             );
             $this->remoteExecutor->execute(
-                $remoteKey,
-                "$remoteUser@$server",
+                $remoteKey, "$remoteUser@$server",
                 array('setfacl', '-R', '-m', 'u:www-data:rwX', '-m', "u:$remoteUser:rwX", 'app/cache', 'app/logs'),
-                $servicePath,
-                $output,
-                STDERR,
-                false
+                $servicePath, $output, STDERR, false
+            );
+            $this->remoteExecutor->execute(
+                $remoteKey, "$remoteUser@$server",
+                array('setfacl', '-dR', '-m', 'u:www-data:rwX', '-m', "u:$remoteUser:rwX", 'app/cache', 'app/logs'),
+                $servicePath, $output, STDERR, false
+            );
+            $this->remoteExecutor->execute(
+                $remoteKey, "$remoteUser@$server",
+                array('app/console', 'c:c', '-e', 'prod'),
+                $servicePath, $output
             );
         }
     }
