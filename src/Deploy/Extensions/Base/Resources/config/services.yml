@@ -8,6 +8,11 @@ services:
           tags:
               -
                    name:    'command'
+    base_dump_command:
+          class:            Deploy\Extensions\Base\Command\DumpCommand
+          tags:
+              -
+                   name:    'command'
     deploy:
           class:            Deploy\Extensions\Base\Deploy
           calls:
