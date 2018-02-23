@@ -18,10 +18,11 @@ abstract class BaseCommand extends ContainerAwareCommand
     protected function applyOptions()
     {
         return $this
+            ->addOption('key', 'i', InputOption::VALUE_OPTIONAL, 'ssh key 路徑')
             ->addOption('path', 'p', InputOption::VALUE_OPTIONAL, '專案 git source 暫存路徑', posix_getcwd())
             ->addOption('repo', null, InputOption::VALUE_OPTIONAL, '專案 git source 來源')
-            ->addOption('revision', 'r', InputOption::VALUE_OPTIONAL, '專案 revision [master, develop, relase, tag]')
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, '設定檔')
+            ->addOption('revision', 'r', InputOption::VALUE_OPTIONAL, '專案 revision [master, develop, relase, tag]')
             ->addOption('frontend', 'f', InputOption::VALUE_OPTIONAL, 'frontend 名稱', 'frontend')
             ->addOption('backend', 'b', InputOption::VALUE_OPTIONAL, 'backend 名稱', 'backend')
             ->addOption('server', 's', InputOption::VALUE_OPTIONAL, '發佈 server [0.service.dgfactor.com,1.service.dgfacgtor.com]')
@@ -39,6 +40,7 @@ abstract class BaseCommand extends ContainerAwareCommand
             ->addOption('web-path', null, InputOption::VALUE_OPTIONAL, '前台 web 路徑 [/mnt/site/{web-host}]')
             ->addOption('admin-path', null, InputOption::VALUE_OPTIONAL, '後台 admin 路徑 [/mnt/site/{admin-host}]')
             ->addOption('service-path', null, InputOption::VALUE_OPTIONAL, 'api service 路徑 [/mnt/service/{service-host}]')
+            ->addOption('site-user', 'u', InputOption::VALUE_OPTIONAL, '遠端 ssh 帳號', 'site')
             ;
 
     }
@@ -92,12 +94,14 @@ abstract class BaseCommand extends ContainerAwareCommand
         $config['build']['target']['web']['server'] = $this->createServerParam($input->getOption('server'), $input->getOption('web-server'));
         $config['build']['target']['admin']['server'] = $this->createServerParam($input->getOption('server'), $input->getOption('admin-server'));
         $config['build']['target']['service']['server'] = $this->createServerParam($input->getOption('server'), $input->getOption('service-server'));
+        $config['build']['remote']['user'] = $input->getOption('site-user');
+        $config['build']['remote']['key'] = $input->getOption('key');
         return $config;
     }
 
     protected function readConfigFileConfig(string $configFile = null)
     {
-        if ($configFile === null || !file_exists($configFile)) {
+        if (is_null($configFile) || !file_exists($configFile)) {
             return array();
         }
         return Yaml::parse(file_get_contents($configFile));
@@ -105,7 +109,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     
     protected function readDefaultConfig()
     {
-        if ($this->defaultConfig === null) {
+        if (is_null($this->defaultConfig)) {
             $this->defaultConfig = Yaml::parse(file_get_contents(__DIR__.'/../Resources/config/build.yml'));
         }
         return $this->defaultConfig;
@@ -118,7 +122,7 @@ abstract class BaseCommand extends ContainerAwareCommand
         }
 
         foreach ($array as $key => $value) {
-            if ($value === null) {
+            if (is_null($value)) {
                 unset($array[$key]);
                 continue;
             }
