@@ -1,0 +1,39 @@
+build:
+    source:
+        revision: master
+        frontend: frontend
+        backend:  backend
+        socket:   resumable
+        path: ~
+        repo: 'git@git.dgfactor.com:project/2018/05/lungnodule'
+    admin:
+        pre:
+            -  php -r "\$config = json_decode(file_get_contents('vue.cm4/static/apibase.json'), true); \$config['tusbase'] = 'https://service.lunlabel.muenai.com/files/'; file_put_contents('vue.cm4/static/apibase.json', json_encode(\$config, JSON_PRETTY_PRINT));"
+            -  php app/console d:d:b --force
+            -  cd doc; apidoc
+        post:   ~
+    remote:
+        user: site
+        key: null
+        pre: {}
+        post: {  }
+    target:
+        web: ~
+        admin:
+            host: www.lunlabel.muenai.com
+            https: true
+            path: /mnt/site/www.lunlabel.muenai.com
+            server:
+                - service.lunlabel.muenai.com
+        service:
+            host: service.lunlabel.muenai.com
+            https: true
+            path: /mnt/service/service.lunlabel.muenai.com
+            server:
+                - service.lunlabel.muenai.com
+        socket:
+            host: service.lunlabel.muenai.com
+            https: true
+            path: /mnt/service/resumable.lunlabel.muenai.com
+            server:
+                - service.lunlabel.muenai.com

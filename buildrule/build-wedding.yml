@@ -1,0 +1,35 @@
+build:
+    source:
+        revision: master
+        frontend: frontend
+        backend: backend
+        socket: ~
+        path: ~
+        repo: 'git@github.com:finn1990/wedding.git'
+    admin:
+        pre:    ~
+        post:   ~
+    remote:
+        user: ubuntu
+        key: null
+        pre: {}
+        post: {  }
+    target:
+        web:
+            host: www.fall1600n.com
+            https: false
+            path: /mnt/site/www.fall1600n.com
+            server:
+                - service.fall1600n.com
+        admin:
+            host: admin.fall1600n.com
+            https: false
+            path: /mnt/site/admin.fall1600n.com
+            server:
+                - service.fall1600n.com
+        service:
+            host: service.fall1600n.com
+            https: false
+            path: /mnt/service/service.fall1600n.com
+            server:
+                - service.fall1600n.com
